@@ -8,24 +8,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { 
   Calendar, 
-  Clock, 
-  MapPin, 
-  Star, 
-  Phone, 
-  User, 
-  CreditCard, 
-  CheckCircle, 
-  ArrowLeft,
   TrendingUp,
-  Users,
   Package,
   DollarSign,
   Eye,
   MessageSquare
 } from "lucide-react";
 import {
-  LineChart,
-  Line,
   AreaChart,
   Area,
   BarChart,
@@ -37,7 +26,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer
 } from 'recharts';
 
@@ -308,7 +296,7 @@ function MyEquipmentList({ owner }: { owner: typeof demoOwners[0] }) {
 }
 
 // Recent Bookings Component
-function RecentBookings({ owner }: { owner: typeof demoOwners[0] }) {
+function RecentBookings() {
   const bookings = [
     { id: "FP001", renter: "Murugan P", equipment: "Tractor", date: "15/01/2025", amount: 2000, status: "Completed" },
     { id: "FP002", renter: "Krishna Reddy", equipment: "Harvester", date: "18/01/2025", amount: 4800, status: "Pending" },
@@ -485,7 +473,7 @@ export default function DashboardPage() {
             {/* Equipment and Bookings */}
             <div className="grid lg:grid-cols-2 gap-6">
               <MyEquipmentList owner={selectedOwner} />
-              <RecentBookings owner={selectedOwner} />
+              <RecentBookings />
             </div>
 
             {/* Quick Actions */}

@@ -465,7 +465,7 @@ export default function MarketplacePage() {
               viewport={{ once: true }}
               className="max-w-2xl mx-auto"
             >
-              <h2 className="text-2xl font-bold mb-4">Can't find what you need?</h2>
+              <h2 className="text-2xl font-bold mb-4">Can&apos;t find what you need?</h2>
               <p className="text-muted-foreground mb-6">
                 List your equipment or send a request to farmers in your area
               </p>

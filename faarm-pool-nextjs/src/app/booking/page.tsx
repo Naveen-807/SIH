@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Calendar, Clock, MapPin, Star, Phone, User, CreditCard, CheckCircle, ArrowLeft } from "lucide-react";
+import { Calendar, MapPin, Star, Phone, User, CreditCard, ArrowLeft } from "lucide-react";
 
 // Mock equipment data for demo
 const selectedEquipment = {
@@ -192,12 +192,23 @@ function EquipmentDetailsStep({ onNext }: { onNext: () => void }) {
   );
 }
 
+interface BookingData {
+  date?: string;
+  time?: string;
+  duration?: number;
+  totalCost?: number;
+  name?: string;
+  village?: string;
+  phone?: string;
+  purpose?: string;
+}
+
 // Schedule Step
 function ScheduleStep({ onNext, onBack, bookingData, setBookingData }: {
   onNext: () => void;
   onBack: () => void;
-  bookingData: any;
-  setBookingData: (data: any) => void;
+  bookingData: BookingData;
+  setBookingData: (data: BookingData) => void;
 }) {
   const [selectedDate, setSelectedDate] = useState(bookingData.date || "");
   const [selectedTime, setSelectedTime] = useState(bookingData.time || "");
@@ -355,8 +366,8 @@ function ScheduleStep({ onNext, onBack, bookingData, setBookingData }: {
 function ContactStep({ onNext, onBack, bookingData, setBookingData }: {
   onNext: () => void;
   onBack: () => void;
-  bookingData: any;
-  setBookingData: (data: any) => void;
+  bookingData: BookingData;
+  setBookingData: (data: BookingData) => void;
 }) {
   const [formData, setFormData] = useState({
     name: bookingData.name || "",
@@ -467,7 +478,7 @@ function ContactStep({ onNext, onBack, bookingData, setBookingData }: {
 function PaymentStep({ onNext, onBack, bookingData }: {
   onNext: () => void;
   onBack: () => void;
-  bookingData: any;
+  bookingData: BookingData;
 }) {
   const [paymentMethod, setPaymentMethod] = useState("upi");
 
@@ -499,7 +510,7 @@ function PaymentStep({ onNext, onBack, bookingData }: {
             </div>
             <div className="flex justify-between">
               <span>Date:</span>
-              <span>{new Date(bookingData.date).toLocaleDateString('en-IN')}</span>
+              <span>{bookingData.date ? new Date(bookingData.date).toLocaleDateString('en-IN') : ''}</span>
             </div>
             <div className="flex justify-between">
               <span>Time:</span>
@@ -563,7 +574,7 @@ function PaymentStep({ onNext, onBack, bookingData }: {
 }
 
 // Confirmation Step
-function ConfirmationStep({ bookingData }: { bookingData: any }) {
+function ConfirmationStep({ bookingData }: { bookingData: BookingData }) {
   const bookingId = `FP${Date.now().toString().slice(-6)}`;
 
   return (
@@ -595,7 +606,7 @@ function ConfirmationStep({ bookingData }: { bookingData: any }) {
             </div>
             <div className="flex justify-between">
               <span>Date & Time:</span>
-              <span>{new Date(bookingData.date).toLocaleDateString('en-IN')} at {bookingData.time}</span>
+              <span>{bookingData.date ? new Date(bookingData.date).toLocaleDateString('en-IN') : ''} at {bookingData.time || ''}</span>
             </div>
             <div className="flex justify-between">
               <span>Duration:</span>
@@ -610,7 +621,7 @@ function ConfirmationStep({ bookingData }: { bookingData: any }) {
 
         {/* Next Steps */}
         <div className="p-4 bg-primary/10 rounded-lg">
-          <h4 className="font-semibold mb-2 text-primary">What's Next?</h4>
+          <h4 className="font-semibold mb-2 text-primary">What&apos;s Next?</h4>
           <ul className="space-y-1 text-sm">
             <li>• Owner will contact you at {bookingData.phone}</li>
             <li>• Coordinate pickup/delivery details</li>
@@ -639,7 +650,7 @@ function ConfirmationStep({ bookingData }: { bookingData: any }) {
 // Main Booking Page Component
 export default function BookingPage() {
   const [currentStep, setCurrentStep] = useState<BookingStep>(BookingStep.DETAILS);
-  const [bookingData, setBookingData] = useState({});
+  const [bookingData, setBookingData] = useState<BookingData>({});
 
   const nextStep = () => {
     setCurrentStep(prev => Math.min(prev + 1, BookingStep.CONFIRMATION) as BookingStep);
