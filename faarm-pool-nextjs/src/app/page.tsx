@@ -50,6 +50,7 @@ function Header() {
           <Link href="#benefits" className="text-sm hover:text-primary transition-colors">Benefits</Link>
           <Link href="#testimonials" className="text-sm hover:text-primary transition-colors">Stories</Link>
           <Link href="/marketplace" className="text-sm hover:text-primary transition-colors">Browse Equipment</Link>
+          <Link href="/kyc" className="text-sm hover:text-primary transition-colors">KYC Verify</Link>
         </nav>
 
         <div className="flex items-center space-x-2">

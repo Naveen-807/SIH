@@ -6,7 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Calendar, MapPin, Star, Phone, User, CreditCard, ArrowLeft } from "lucide-react";
+import { Calendar, MapPin, Star, Phone, User, CreditCard, ArrowLeft, Shield } from "lucide-react";
+import { KYCTrustIndicator } from "@/components/kyc/kyc-components";
+import type { KYCStatus } from "@/components/kyc/kyc-components";
 
 // Mock equipment data for demo
 const selectedEquipment = {
@@ -24,7 +26,8 @@ const selectedEquipment = {
   specifications: ["50 HP", "4WD", "Power Steering", "Hydraulic Lift"],
   crops: ["Rice", "Sugarcane", "Cotton"],
   ownerPhone: "+91 9876543210",
-  ownerCrops: "Rice, Sugarcane, Cotton (25 acres)"
+  ownerCrops: "Rice, Sugarcane, Cotton (25 acres)",
+  kycStatus: "verified" as KYCStatus
 };
 
 // Header Component
@@ -56,6 +59,7 @@ function Header() {
           <Link href="/marketplace" className="text-sm hover:text-primary transition-colors">Marketplace</Link>
           <Link href="/dashboard" className="text-sm hover:text-primary transition-colors">Dashboard</Link>
           <Link href="/booking" className="text-sm text-primary font-medium">Booking</Link>
+          <Link href="/kyc" className="text-sm hover:text-primary transition-colors">KYC Verify</Link>
         </nav>
 
         <div className="flex items-center space-x-2">
@@ -159,6 +163,13 @@ function EquipmentDetailsStep({ onNext }: { onNext: () => void }) {
             </p>
           </div>
         </div>
+
+        {/* KYC Trust Indicator */}
+        <KYCTrustIndicator 
+          status={selectedEquipment.kycStatus} 
+          ownerName={selectedEquipment.owner} 
+          compact={false} 
+        />
 
         {/* Specifications */}
         <div>
@@ -392,6 +403,25 @@ function ContactStep({ onNext, onBack, bookingData, setBookingData }: {
       </CardHeader>
       
       <CardContent className="space-y-6">
+        {/* KYC Notice for High-Value Equipment */}
+        {selectedEquipment.price > 800 && (
+          <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+            <h4 className="font-semibold mb-2 text-blue-800 dark:text-blue-200 flex items-center">
+              <Shield className="h-4 w-4 mr-2" />
+              KYC Verification Recommended
+            </h4>
+            <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
+              For high-value equipment rentals (₹800+/hour), we recommend completing KYC verification 
+              to build trust and ensure smoother transactions.
+            </p>
+            <Link href="/kyc">
+              <button className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors">
+                Verify Identity
+              </button>
+            </Link>
+          </div>
+        )}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-2">Your Name *</label>

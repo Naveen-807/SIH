@@ -7,6 +7,8 @@ import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, Filter, MapPin, Star, Calendar, Clock } from "lucide-react";
+import { KYCBadge, KYCTrustIndicator } from "@/components/kyc/kyc-components";
+import type { KYCStatus } from "@/components/kyc/kyc-components";
 
 // Equipment data with realistic Indian farming context
 const equipmentData = [
@@ -24,7 +26,8 @@ const equipmentData = [
     availability: "Available",
     description: "50 HP, excellent for paddy fields and sugarcane farming",
     specifications: ["50 HP", "4WD", "Power Steering", "Hydraulic Lift"],
-    crops: ["Rice", "Sugarcane", "Cotton"]
+    crops: ["Rice", "Sugarcane", "Cotton"],
+    kycStatus: "verified" as KYCStatus
   },
   {
     id: 2,
@@ -40,7 +43,8 @@ const equipmentData = [
     availability: "Available",
     description: "Combine harvester perfect for wheat and maize",
     specifications: ["120 HP", "Self-Propelled", "High Capacity", "GPS Enabled"],
-    crops: ["Wheat", "Maize", "Barley"]
+    crops: ["Wheat", "Maize", "Barley"],
+    kycStatus: "verified" as KYCStatus
   },
   {
     id: 3,
@@ -56,7 +60,8 @@ const equipmentData = [
     availability: "Available",
     description: "7-foot rotavator for soil preparation and weed control",
     specifications: ["7 Feet Width", "Heavy Duty Blades", "PTO Driven"],
-    crops: ["Cotton", "Turmeric", "Groundnut"]
+    crops: ["Cotton", "Turmeric", "Groundnut"],
+    kycStatus: "under_review" as KYCStatus
   },
   {
     id: 4,
@@ -72,7 +77,8 @@ const equipmentData = [
     availability: "Booked",
     description: "Rice transplanter for efficient paddy planting",
     specifications: ["6 Rows", "Automatic", "Adjustable Depth"],
-    crops: ["Rice", "Paddy"]
+    crops: ["Rice", "Paddy"],
+    kycStatus: "not_started" as KYCStatus
   },
   {
     id: 5,
@@ -88,7 +94,8 @@ const equipmentData = [
     availability: "Available",
     description: "45 HP compact tractor ideal for small to medium farms",
     specifications: ["45 HP", "Fuel Efficient", "Easy Operation"],
-    crops: ["Vegetables", "Flowers", "Millets"]
+    crops: ["Vegetables", "Flowers", "Millets"],
+    kycStatus: "verified" as KYCStatus
   },
   {
     id: 6,
@@ -104,7 +111,8 @@ const equipmentData = [
     availability: "Available",
     description: "High capacity water pump for irrigation",
     specifications: ["5 HP Motor", "Submersible", "High Flow Rate"],
-    crops: ["All Crops", "Coconut", "Banana"]
+    crops: ["All Crops", "Coconut", "Banana"],
+    kycStatus: "in_progress" as KYCStatus
   },
   {
     id: 7,
@@ -120,7 +128,8 @@ const equipmentData = [
     availability: "Available",
     description: "9-tyne seed drill for precision sowing",
     specifications: ["9 Tyne", "Adjustable Spacing", "Fertilizer Box"],
-    crops: ["Wheat", "Maize", "Sorghum"]
+    crops: ["Wheat", "Maize", "Sorghum"],
+    kycStatus: "verified" as KYCStatus
   },
   {
     id: 8,
@@ -136,7 +145,8 @@ const equipmentData = [
     availability: "Available",
     description: "Self-propelled weeder for inter-cultivation",
     specifications: ["Self-Propelled", "Adjustable Width", "Low Maintenance"],
-    crops: ["Rice", "Cotton", "Sugarcane"]
+    crops: ["Rice", "Cotton", "Sugarcane"],
+    kycStatus: "rejected" as KYCStatus
   }
 ];
 
@@ -169,6 +179,7 @@ function Header() {
           <Link href="/marketplace" className="text-sm text-primary font-medium">Marketplace</Link>
           <Link href="/dashboard" className="text-sm hover:text-primary transition-colors">Dashboard</Link>
           <Link href="/booking" className="text-sm hover:text-primary transition-colors">My Bookings</Link>
+          <Link href="/kyc" className="text-sm hover:text-primary transition-colors">KYC Verify</Link>
         </nav>
 
         <div className="flex items-center space-x-2">
@@ -297,14 +308,24 @@ function EquipmentCard({ equipment }: { equipment: typeof equipmentData[0] }) {
           {/* Owner Info */}
           <div className="flex items-center space-x-2 text-sm">
             <div className="text-2xl">👨‍🌾</div>
-            <div>
+            <div className="flex-1">
               <p className="font-medium">{equipment.owner}</p>
               <p className="text-muted-foreground flex items-center">
                 <MapPin className="h-3 w-3 mr-1" />
                 {equipment.village}, {equipment.location.split(", ")[0]}
               </p>
             </div>
+            <KYCBadge status={equipment.kycStatus} size="sm" showText={false} />
           </div>
+
+          {/* KYC Trust Indicator */}
+          {equipment.kycStatus === 'verified' && (
+            <KYCTrustIndicator 
+              status={equipment.kycStatus} 
+              ownerName={equipment.owner} 
+              compact={true} 
+            />
+          )}
 
           {/* Specifications */}
           <div>

@@ -14,6 +14,8 @@ import {
   Eye,
   MessageSquare
 } from "lucide-react";
+import { KYCStatusCard } from "@/components/kyc/kyc-components";
+import type { KYCStatus } from "@/components/kyc/kyc-components";
 import {
   AreaChart,
   Area,
@@ -58,6 +60,7 @@ function Header() {
           <Link href="/marketplace" className="text-sm hover:text-primary transition-colors">Marketplace</Link>
           <Link href="/dashboard" className="text-sm text-primary font-medium">Dashboard</Link>
           <Link href="/booking" className="text-sm hover:text-primary transition-colors">Bookings</Link>
+          <Link href="/kyc" className="text-sm hover:text-primary transition-colors">KYC Verify</Link>
         </nav>
 
         <div className="flex items-center space-x-2">
@@ -110,7 +113,8 @@ const demoOwners = [
     totalEarnings: 45000,
     rating: 4.8,
     crops: "Rice, Sugarcane",
-    farmSize: "25 acres"
+    farmSize: "25 acres",
+    kycStatus: "verified" as KYCStatus
   },
   {
     id: 2,
@@ -121,7 +125,8 @@ const demoOwners = [
     totalEarnings: 38000,
     rating: 4.9,
     crops: "Wheat, Maize",
-    farmSize: "18 acres"
+    farmSize: "18 acres",
+    kycStatus: "under_review" as KYCStatus
   },
   {
     id: 3,
@@ -132,7 +137,8 @@ const demoOwners = [
     totalEarnings: 22000,
     rating: 4.7,
     crops: "Cotton, Turmeric",
-    farmSize: "12 acres"
+    farmSize: "12 acres",
+    kycStatus: "not_started" as KYCStatus
   }
 ];
 
@@ -338,6 +344,10 @@ function RecentBookings() {
 export default function DashboardPage() {
   const [selectedOwner, setSelectedOwner] = useState(demoOwners[0]);
 
+  const handleStartKYC = () => {
+    window.location.href = '/kyc';
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50/50 to-teal-50/50 dark:from-green-950/20 dark:to-teal-950/20">
       <Header />
@@ -361,6 +371,13 @@ export default function DashboardPage() {
 
             {/* Owner Selector */}
             <OwnerSelector selectedOwner={selectedOwner} onSelect={setSelectedOwner} />
+
+            {/* KYC Status Card */}
+            <KYCStatusCard 
+              status={selectedOwner.kycStatus} 
+              lastUpdated="2 hours ago"
+              onStartVerification={handleStartKYC}
+            />
 
             {/* Stats Cards */}
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
